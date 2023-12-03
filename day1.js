@@ -1007,21 +1007,23 @@ const input = [
 'fbfvqgvqfone5nctdcdpteighttwo',
 'dhfbhone4fourlgzftg'];
 
-const regExp = /[0-9]/;
+// solution one
+const oneDecimal = /[0-9]/;
 
 // reduce all values to the sum
 input.reduce((sum, val) => {
   let twoDigit = '';
   // pull the first number out
-  twoDigit += val.match( regExp );
+  twoDigit += val.match( oneDecimal );
   // reverse the string, pull the last (now first) number out
-  twoDigit += val.split('').reverse().join('').match( regExp );
+  twoDigit += val.split('').reverse().join('').match( oneDecimal );
   // add everything together
   return sum + parseInt(twoDigit);
 }, 0 ); // 54338
 
 
 
+// solution two
 const numbers = [null, 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
 const revNumbers = [null, 'eno', 'owt', 'eerht', 'ruof', 'evif', 'xis', 'neves', 'thgie', 'enin',];
 const numbersRegexp = /one|two|three|four|five|six|seven|eight|nine/;
@@ -1037,7 +1039,7 @@ function sumFn(sum, val){
       val = val.replace(text, number);
     });
   }
-  twoDigit += val.match( regExp );
+  twoDigit += val.match( oneDecimal );
   
   let reversed = origVal.split('').reverse().join('');
   matches = reversed.match(reversedNumbersRegexp);
@@ -1047,10 +1049,35 @@ function sumFn(sum, val){
       reversed = reversed.replace(text, number);
     });
   }
-  twoDigit += reversed.match( regExp );
+  twoDigit += reversed.match( oneDecimal );
   return sum + parseInt(twoDigit);
 }
 
 example.reduce( sumFn, 0); // 281
 input.reduce(sumFn, 0); // 53389
+
+
+
+// solution two: revisited, condensed, less legible, more horrible
+//   if the # character is in the data it will fail silently!
+const textNumbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+const numbersText = textNumbers.join('|').split('').reverse().join('').split('|').reverse();
+const numbersRegExp = RegExp(textNumbers.join('|'));
+const regExpNumbers = RegExp(textNumbers.join('|').split('').reverse().join(''));
+
+function sumFn(sum, val){
+  const [firsText] = val.match(numbersRegExp) || ['#'];
+  const first = val.replace(firsText, textNumbers.indexOf(firsText) +1).match(oneDecimal);
+  
+  // reverse the vars and do it again to get the lastt
+  val = val.split('').reverse().join('');
+  
+  const [lastText] = val.match(regExpNumbers) || ['#'];
+  const last  = val.replace(lastText, numbersText.indexOf(lastText) +1).match(oneDecimal);
+  
+  return sum + parseInt(first + last);
+}
+
+console.log(example.reduce(sumFn, 0)); // 281
+console.log(input.reduce(sumFn, 0)); // 53389
 

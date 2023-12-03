@@ -107,6 +107,8 @@ const elf = [
 'Game 99: 3 green, 7 red, 4 blue; 9 red, 13 blue, 2 green; 3 red, 2 green, 11 blue; 5 red, 6 blue, 3 green; 8 blue, 5 green, 6 red; 6 green, 13 red, 1 blue',
 'Game 100: 9 green, 7 blue; 1 green, 3 red, 4 blue; 15 red, 9 green; 3 blue, 6 red, 13 green; 2 red, 11 blue, 12 green',];
 
+
+// solution one
 function isValid( counter ){
   if(counter['red'] > 12) return false;
   if(counter['green'] > 13) return false;
@@ -141,9 +143,36 @@ test.reduce(first, 0); // 8
 elf.reduce(first, 0); // answer: 2162
 
 
+// solution one using only reduce
+function firstReduceOnly(sum, game ) {
+  const [ , gameId, rounds] = game.match(/Game ([0-9]+): (.+)/)
+  const gameValid = rounds.split('; ').reduce((gameValid, round )=>{
+    const counter = round.split(', ').reduce((counter, cube )=>{
+      const [count, color] = cube.split(' ');
+      counter[color] = count;
+      return counter;
+    }, {
+      'red': 0,
+      'green': 0,
+      'blue': 0,
+    });
+    if( !isValid(counter))
+      return false;
+    return gameValid;
+  }, true);
+  if(gameValid){
+    sum += parseInt(gameId);
+  }
+  return sum;
+}
+
+
+test.reduce(firstReduceOnly, 0); // 8
+elf.reduce(firstReduceOnly, 0); // answer: 2162
 
 
 
+// solution two
 function second( sum, game ) {
   const counter = {
     'red': 0,
@@ -163,4 +192,27 @@ function second( sum, game ) {
 
 test.reduce(second, 0); // 2286
 elf.reduce(second, 0); // 72513
+
+
+// solution two using only reduce
+function secondReduceOnly( sum, game ) {
+  const [ , gameId, rounds] = game.match(/Game ([0-9]+): (.+)/)
+  const counter = rounds.split('; ').reduce( ( counter, round ) => {
+    return round.split(', ').reduce((counter, cubes ) => {
+      const [count, color] = cubes.split(' ');
+      counter[color] = Math.max( parseInt(count), counter[color] );
+      return counter;
+    }, counter);
+  }, {
+    'red': 0,
+    'green': 0,
+    'blue': 0,
+  });
+  return sum + (counter['red'] * counter['blue'] * counter['green']);
+}
+
+test.reduce(secondReduceOnly, 0); // 2286
+elf.reduce(secondReduceOnly, 0); // 72513
+
+
 
