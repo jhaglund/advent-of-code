@@ -1066,13 +1066,13 @@ const numbersRegExp = RegExp(textNumbers.join('|'));
 const regExpNumbers = RegExp(textNumbers.join('|').split('').reverse().join(''));
 
 function sumFnTwo(sum, val){
-  const [firsText] = val.match(numbersRegExp) || ['#'];
+  const [firsText] = val.match(numbersRegExp) || ['##########################'];
   const first = val.replace(firsText, textNumbers.indexOf(firsText) +1).match(oneDecimal);
   
   // reverse the vars and do it again to get the lastt
   val = val.split('').reverse().join('');
   
-  const [lastText] = val.match(regExpNumbers) || ['#'];
+  const [lastText] = val.match(regExpNumbers) || ['##########################'];
   const last  = val.replace(lastText, numbersText.indexOf(lastText) +1).match(oneDecimal);
   
   return sum + parseInt(first + last);
