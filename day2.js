@@ -139,8 +139,8 @@ function first(sum, game ) {
   return sum;
 }
 
-test.reduce(first, 0); // 8
-elf.reduce(first, 0); // answer: 2162
+console.log(test.reduce(first, 0), 8); // 8
+console.log(elf.reduce(first, 0), 2162); // answer: 2162
 
 
 // solution one using only reduce
@@ -167,8 +167,8 @@ function firstReduceOnly(sum, game ) {
 }
 
 
-test.reduce(firstReduceOnly, 0); // 8
-elf.reduce(firstReduceOnly, 0); // answer: 2162
+console.log(test.reduce(firstReduceOnly, 0), 8); // 8
+console.log(elf.reduce(firstReduceOnly, 0), 2162); // answer: 2162
 
 
 
@@ -190,8 +190,8 @@ function second( sum, game ) {
   return sum + (counter['red'] * counter['blue'] * counter['green']);
 }
 
-test.reduce(second, 0); // 2286
-elf.reduce(second, 0); // 72513
+console.log(test.reduce(second, 0), 2286); // 2286
+console.log(elf.reduce(second, 0), 72513); // 72513
 
 
 // solution two using only reduce
@@ -211,8 +211,8 @@ function secondReduceOnly( sum, game ) {
   return sum + (counter['red'] * counter['blue'] * counter['green']);
 }
 
-test.reduce(secondReduceOnly, 0); // 2286
-elf.reduce(secondReduceOnly, 0); // 72513
+console.log(test.reduce(secondReduceOnly, 0), 2286); // 2286
+console.log(elf.reduce(secondReduceOnly, 0), 72513); // 72513
 
 
 

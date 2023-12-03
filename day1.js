@@ -1011,7 +1011,7 @@ const input = [
 const oneDecimal = /[0-9]/;
 
 // reduce all values to the sum
-input.reduce((sum, val) => {
+console.log(input.reduce((sum, val) => {
   let twoDigit = '';
   // pull the first number out
   twoDigit += val.match( oneDecimal );
@@ -1019,7 +1019,7 @@ input.reduce((sum, val) => {
   twoDigit += val.split('').reverse().join('').match( oneDecimal );
   // add everything together
   return sum + parseInt(twoDigit);
-}, 0 ); // 54338
+}, 0 ), 54338); // 54338
 
 
 
@@ -1053,8 +1053,8 @@ function sumFn(sum, val){
   return sum + parseInt(twoDigit);
 }
 
-example.reduce( sumFn, 0); // 281
-input.reduce(sumFn, 0); // 53389
+console.log(example.reduce( sumFn, 0), 281); // 281
+console.log(input.reduce(sumFn, 0), 53389); // 53389
 
 
 
@@ -1065,7 +1065,7 @@ const numbersText = textNumbers.join('|').split('').reverse().join('').split('|'
 const numbersRegExp = RegExp(textNumbers.join('|'));
 const regExpNumbers = RegExp(textNumbers.join('|').split('').reverse().join(''));
 
-function sumFn(sum, val){
+function sumFnTwo(sum, val){
   const [firsText] = val.match(numbersRegExp) || ['#'];
   const first = val.replace(firsText, textNumbers.indexOf(firsText) +1).match(oneDecimal);
   
@@ -1078,6 +1078,6 @@ function sumFn(sum, val){
   return sum + parseInt(first + last);
 }
 
-console.log(example.reduce(sumFn, 0)); // 281
-console.log(input.reduce(sumFn, 0)); // 53389
+console.log(example.reduce(sumFnTwo, 0), 281); // 281
+console.log(input.reduce(sumFnTwo, 0), 53389); // 53389
 
