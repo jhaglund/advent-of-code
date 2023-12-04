@@ -153,7 +153,6 @@ const test = [
 '...$.*....',
 '.664.598..',];
 
-
 const split = test.map( (row) => row.split('') );
 const matchNumbers = /[0-9]+/g;
 const matchSymbols = /[^\.[^0-9]+/;
@@ -187,5 +186,75 @@ part1(test);
 console.log('test expect 4361');
 part1(input);
 console.log('539433 is answer!');
+
+const matchGear = /\*/g;
+function part2(data){
+  let sum = 0;
+  function backwards(found, position, dataIndex){
+    if( position < 0) return found;
+    const number = data[ dataIndex ].substring(position, position+1).match(/\d/);
+    if(number === null) return found;
+    return backwards(''+number+found, position-1, dataIndex);
+  }
+  function forwards(found, position, dataIndex){
+    if(position >= data[ dataIndex ].length) return found;
+    const number = data[ dataIndex ].substring(position, position+1).match(/\d/);
+    if(number === null) return found;
+    return forwards(''+found+number, position+1, dataIndex);
+  }
+  function lineCheck(i, match){
+    // look for numbers around the *
+    let lineMatch, gear, offset;
+    const ratios = [];
+    const prevIndex = Math.max(i-1, 0);
+    const nextIndex = Math.min(i+1, data.length-1);
+    const start = Math.max(match.index-1, 0);
+    const len = 3;
+    const a = data[ prevIndex ].substring(start, start+len);
+    const b = data[ i ].substring(start, start+len);
+    const c = data[ nextIndex ].substring(start, start+len);
+    if(prevIndex !== i) {
+      while ((lineMatch = matchNumbers.exec(a)) !== null) {
+        offset = String(lineMatch).length;
+        gear = backwards(String(lineMatch), start + lineMatch.index - 1, prevIndex);
+        gear = forwards(gear, start + lineMatch.index + offset, prevIndex);
+        ratios.push(parseInt(gear));
+      }
+    }
+    while((lineMatch = matchNumbers.exec(b)) !==null){
+      offset = String(lineMatch).length;
+      gear = backwards(String(lineMatch), start + lineMatch.index - 1, i);
+      gear = forwards(gear, start + lineMatch.index + offset, i);
+      ratios.push(parseInt(gear));
+    }
+    if(nextIndex !== i){
+      while((lineMatch = matchNumbers.exec(c)) !==null){
+        offset = String(lineMatch).length;
+        gear = backwards(String(lineMatch), start+lineMatch.index-1, nextIndex);
+        gear = forwards(gear, start+lineMatch.index+offset, nextIndex);
+        ratios.push(parseInt(gear));
+      }
+    }
+    if(ratios.length > 1) {
+      console.log('found ratios', ratios[0], ratios[1]);
+      return ratios[0] * ratios[1];
+    }
+    return 0;
+  }
+  data.forEach((row, i)=>{
+    // look for *, then find adjacent numbers
+    let match, ratio;
+    while((match = matchGear.exec(row)) !== null){
+      sum += lineCheck(i, match);
+    }
+  });
+  console.log('part two: ', sum);
+
+}
+part2(test);
+console.log('check two: 467835');
+// part2([input[0], input[1], input[2], input[3], input[4], ]);
+part2(input);
+console.log('75847567 is answer!');
 
 
